@@ -129,25 +129,23 @@ export default function App() {
     setState('thinking')
   
     try {
-      const res = await axios.post("http://localhost:5001/process_audio")
-      setFullText(res.data.reply)
-      setState('talking')
+      await axios.post("http://localhost:5001/process_audio")
   
-      // ✅ 開始輪詢詢問後端是否播放完
       const intervalId = setInterval(async () => {
         const status = await axios.get("http://localhost:5001/audio_status")
-        if (!status.data.playing) {
-          clearInterval(intervalId)
-          setState('idle')
+        console.log(status.data)  // ✅ 正確 debug
+        setState(status.data.state)
+        if (status.data.has_new) {
+          setFullText(status.data.reply)
         }
-      }, 1000) // 每 1秒問一次
-  
+      }, 1000)
     } catch (err) {
       console.error(err)
       setFullText("❌ 發生錯誤，請稍後再試")
-      setState('idle')
+      console.error("err")  // ✅ 正確錯誤輸出
     }
   }
+  
   
   
   

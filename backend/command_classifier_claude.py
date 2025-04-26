@@ -73,12 +73,12 @@ class CommandClassifier:
         - 行動
         """
 
-        print("\n=== 提示詞內容 ===")
-        print(prompt)
-        print("=== 提示詞結束 ===\n")
+        # print("\n=== 提示詞內容 ===")
+        # print(prompt)
+        # print("=== 提示詞結束 ===\n")
 
         result = self._send_to_model(prompt).strip()
-        print(f"模型響應: {result}\n")
+        #print(f"模型響應: {result}\n")
 
         if '查' in result or '詢' in result:
             print("分類結果: 查詢")
@@ -97,9 +97,9 @@ class CommandClassifier:
         請用繁體中文回覆。
         用戶說：{text}
         """
-        print("\n=== 聊天提示詞內容 ===")
-        print(prompt)
-        print("=== 提示詞結束 ===\n")
+        # print("\n=== 聊天提示詞內容 ===")
+        # print(prompt)
+        # print("=== 提示詞結束 ===\n")
 
         result = self._send_to_model(prompt).strip()
         print(f"Claude回應: {result}\n")
@@ -118,7 +118,7 @@ class CommandClassifier:
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(chat_data, f, ensure_ascii=False, indent=2)
 
-        print(f"聊天記錄已保存至: {file_path}\n")
+        #print(f"聊天記錄已保存至: {file_path}\n")
 
     def web_search(self, query):
         """網路搜尋"""
@@ -149,12 +149,12 @@ class CommandClassifier:
         用戶查詢：{text}
         """
 
-        print("\n=== 查詢提示詞內容 ===")
-        print(prompt)
-        print("=== 提示詞結束 ===\n")
+        # print("\n=== 查詢提示詞內容 ===")
+        # print(prompt)
+        # print("=== 提示詞結束 ===\n")
 
         search_query = text
-        print(f"生成的搜索關鍵詞: {search_query}")
+        # print(f"生成的搜索關鍵詞: {search_query}")
 
         search_results = self.web_search(search_query)
 
@@ -187,7 +187,7 @@ class CommandClassifier:
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(query_data, f, ensure_ascii=False, indent=2)
 
-        print(f"查詢記錄已保存至: {file_path}\n")
+        #(f"查詢記錄已保存至: {file_path}\n")
 
     def handle_movement(self, text):
         """處理行動命令"""
@@ -223,12 +223,12 @@ class CommandClassifier:
         3. 回覆必須是有效的JSON格式，並使用```json 包裹
         """
 
-        print("\n=== 行動規劃提示詞內容 ===")
-        print(prompt)
-        print("=== 提示詞結束 ===\n")
+        # print("\n=== 行動規劃提示詞內容 ===")
+        # print(prompt)
+        # print("=== 提示詞結束 ===\n")
 
         result = self._send_to_model(prompt).strip()
-        print(f"Claude回應: {result}\n")
+        #print(f"Claude回應: {result}\n")
 
         try:
             if "```json" in result:
@@ -260,7 +260,7 @@ class CommandClassifier:
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(movement_data, f, ensure_ascii=False, indent=2)
 
-        print(f"行動計劃已保存至: {file_path}\n")
+        #print(f"行動計劃已保存至: {file_path}\n")
 
 if __name__ == "__main__":
     classifier = CommandClassifier()
@@ -269,7 +269,7 @@ if __name__ == "__main__":
         "幫我查行天宮附近的披薩店"
     ]
 
-    print("開始測試命令分類：\n")
+    #print("開始測試命令分類：\n")
 
     for command in test_commands:
         print(f"測試命令: {command}")

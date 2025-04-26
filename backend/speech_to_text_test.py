@@ -4,6 +4,9 @@ import sys
 import boto3
 from dotenv import load_dotenv
 from datetime import datetime
+from opencc import OpenCC
+
+converter = OpenCC('s2tw')  # ✅ 注意這裡直接寫 's2t'，不用加 '.json'
 
 # ✅ 載入 config/.env（用絕對路徑避免錯誤）
 env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'config', '.env'))
@@ -43,7 +46,7 @@ class SpeechToText:
         with open(transcript_filename, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
-        print(f"轉寫文本已保存至: {transcript_filename}")
+        # print(f"轉寫文本已保存至: {transcript_filename}")
         return transcript_filename
 
     def transcribe_file(self, audio_file_path):
@@ -71,12 +74,12 @@ class SpeechToText:
                 confidence = result.get("confidence", 0.9)
                 print(f"識別結果: {transcript_text}")
 
-            print("語音轉換完成!")
+            #print("語音轉換完成!")
 
             if transcript_text:
                 self.save_transcript(transcript_text, audio_file_path, confidence)
 
-            return transcript_text
+            return converter.convert(transcript_text)
 
         except Exception as e:
             print(f"轉換過程中出現錯誤: {str(e)}")
@@ -86,7 +89,7 @@ def main():
     # ✅ 測試音檔請放這個路徑（改為相對路徑，統一使用）
     test_audio_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'data', 'audio', 'test.wav'))
 
-    print(f"開始測試語音識別，使用音頻文件：{test_audio_path}")
+    #print(f"開始測試語音識別，使用音頻文件：{test_audio_path}")
 
     if not os.path.exists(test_audio_path):
         print(f"錯誤：音頻文件不存在於路徑 {test_audio_path}")
@@ -95,11 +98,11 @@ def main():
     speech_to_text = SpeechToText()
     transcript_text = speech_to_text.transcribe_file(test_audio_path)
 
-    if transcript_text:
-        print("\n識別結果摘要:")
-        print(f"文本: {transcript_text}")
-    else:
-        print("未能獲取有效的識別結果")
+    # if transcript_text:
+    #     print("\n識別結果摘要:")
+    #     print(f"文本: {transcript_text}")
+    # else:
+    #     print("未能獲取有效的識別結果")
 
 if __name__ == "__main__":
     main()
