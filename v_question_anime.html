@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>熊臉語音機器人表情模擬</title>
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    .face {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+      background-color: #000;
+      border-radius: 50%;
+      border: 5px solid #fff;
+    }
+
+    .eye {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: pink;
+      border-radius: 50%;
+      top: 80px;
+      transition: all 0.1s;
+    }
+    .eye.left { left: 60px; }
+    .eye.right { right: 60px; }
+    /* Blink: 瞬間收眼置中顯示 */
+    .eye.blink {
+      height: 5px;
+      /* 讓閉眼條移到眼睛中心 */
+      top: calc(80px + (50px - 5px) / 2);
+      border-radius: 50% / 10%;
+    }
+
+    .eyebrow, .frown {
+      position: absolute;
+      background-color: pink;
+      transition: all 0.3s;
+    }
+    /* Idle: eyebrows hidden */
+    .eyebrow.left, .eyebrow.right { display: none; }
+
+    /* Thinking: horizontal brow moved down */
+    .eyebrow.thinking-horizontal {
+      width: 100px;
+      height: 5px;
+      top: 100px;
+      border-radius: 2px;
+    }
+    .eyebrow.thinking-horizontal.left { left: 40px; }
+    .eyebrow.thinking-horizontal.right { right: 40px; }
+
+    /* Frown lines between brows: positioned above brows */
+    .frown {
+      width: 5px;
+      height: 20px;
+      border-radius: 2px;
+      display: none;
+    }
+    .frown.left { top: 85px; left: 135px; }
+    .frown.right { top: 85px; left: 160px; }
+
+    /* Sweat drop */
+    .sweat {
+      position: absolute;
+      top: 50px;
+      right: 60px;
+      width: 15px;
+      height: 25px;
+      background-color: rgb(192, 248, 255);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      display: none;
+    }
+
+    /* 汗珠動畫 */
+    /* @keyframes sweat {
+      0%   { top: 50px; }
+      50%  { top: 80px; }
+      100% { top: 50px; }
+    }
+    .sweat.animate {
+      display: block;
+      animation: sweat 1.5s ease-in-out infinite;
+    } */
+
+    @keyframes sweat-drop {
+      0%   { top: 50px; opacity: 1; }
+      60%  { top: 80px; opacity: 1; }
+      61%  { opacity: 0; }
+      100% { top: 80px; opacity: 0; }
+    }
+    .sweat.animate { display: block; animation: sweat-drop 2s ease-in-out infinite; }
+    
+    /* 問號元素 */
+    .question { 
+      position: absolute; 
+      color: rgb(255, 0, 43); 
+      font-size: 100px; 
+      opacity: 0; 
+    }
+    .question.q1 { 
+      top: -60px; 
+      left: 130px; 
+      animation: rot1 2s ease-in-out infinite; 
+    }
+    .question.q2 { 
+      top: 20px; 
+      left: -50px; 
+      animation: rot2 2.5s ease-in-out infinite; 
+    }
+    .question.q3 { 
+      top: 60px; 
+      right: -80px; 
+      animation: rot3 2.2s ease-in-out infinite; 
+    }
+    @keyframes rot1 { 
+      0%,100% { transform: rotate( -15deg ); opacity:1; } 
+      50% { transform: rotate(15deg ); opacity:1; } 
+    }
+    @keyframes rot2 { 
+      0%,100% { transform: rotate( 10deg ); opacity:1; } 
+      50% { transform: rotate(-10deg ); opacity:1; } 
+    }
+    @keyframes rot3 { 
+      0%,100% { transform: rotate( -20deg ); opacity:1; } 
+      50% { transform: rotate(20deg ); opacity:1; } 
+    }
+    
+    
+    
+    
+    .mouth {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      transition: all 0.3s;
+    }
+    /* Idle smile */
+    .mouth.idle {
+      display: block;
+      top: 200px;
+      width: 80px;
+      height: 50px;
+      background: pink;
+      border-bottom-left-radius: 40px 30px;
+      border-bottom-right-radius: 40px 30px;
+    }
+    /* Thinking line mouth moved down */
+    .mouth.thinking {
+      display: block;
+      top: 220px;
+      width: 30px;
+      height: 5px;
+      background-color: pink;
+      border-radius: 2px;
+    }
+    /* Talking dynamic mouth */
+    .mouth.talking {
+      display: block;
+      top: 200px;
+      width: 80px;
+      height: 50px;
+      background: pink;
+      border-bottom-left-radius: 40px 30px;
+      border-bottom-right-radius: 40px 30px;
+      animation: talk 0.4s infinite alternate;
+    }
+    @keyframes talk {
+      0% { height: 20px; }
+      100% { height: 60px; }
+    }
+
+    .btn-group button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body onload="setState('idle')">
+  <h1>熊臉語音機器人表情模擬</h1>
+  <div class="face" id="face">
+    <div class="eyebrow left" id="eyebrowL"></div>
+    <div class="eyebrow right" id="eyebrowR"></div>
+    <div class="eye left" id="eyeL"></div>
+    <div class="eye right" id="eyeR"></div>
+    <div class="frown left" id="frownL"></div>
+    <div class="frown right" id="frownR"></div>
+    <div class="sweat" id="sweat"></div>
+    <div class="mouth" id="mouth"></div>
+    <div class="question q1">?</div>
+    <div class="question q2">?</div>
+    <div class="question q3">?</div>
+  </div>
+
+  <div class="btn-group">
+    <button onclick="setState('idle')">待機</button>
+    <button onclick="setState('thinking')">思考</button>
+    <button onclick="setState('talking')">說話</button>
+  </div>
+
+  <script>
+    const eyebrowL = document.getElementById('eyebrowL');
+    const eyebrowR = document.getElementById('eyebrowR');
+    const eyeL = document.getElementById('eyeL');
+    const eyeR = document.getElementById('eyeR');
+    const frownL = document.getElementById('frownL');
+    const frownR = document.getElementById('frownR');
+    const sweat = document.getElementById('sweat');
+    const mouth = document.getElementById('mouth');
+    const qs = document.querySelectorAll('.question');
+    let thinkingInterval, blinkInterval;
+
+    function setState(state) {
+      clearInterval(thinkingInterval);
+      clearInterval(blinkInterval);
+      // Reset all
+      [eyebrowL, eyebrowR, frownL, frownR, ...qs].forEach(el => el.style.display = 'none');
+      eyebrowL.className = 'eyebrow left'; eyebrowR.className = 'eyebrow right';
+      eyeL.classList.remove('blink'); eyeR.classList.remove('blink');
+      eyeL.style.display = 'block'; eyeR.style.display = 'block';
+      sweat.classList.remove('animate');
+      mouth.className = 'mouth';
+
+      if (state === 'idle') {
+        mouth.classList.add('idle');
+      } else if (state === 'thinking') {
+        eyebrowL.style.display = 'block'; eyebrowR.style.display = 'block';
+        eyebrowL.className = 'eyebrow thinking-horizontal left';
+        eyebrowR.className = 'eyebrow thinking-horizontal right';
+        eyeL.style.display = 'none'; eyeR.style.display = 'none';
+        // sweat.classList.add('animate');
+        frownL.style.display = 'block'; frownR.style.display = 'block';
+        mouth.classList.add('thinking');
+        qs.forEach(el => el.style.display = 'block');
+      } else if (state === 'talking') {
+        mouth.classList.add('talking');
+        // Blink every 2s, 200ms duration
+        blinkInterval = setInterval(() => {
+          eyeL.classList.add('blink'); eyeR.classList.add('blink');
+          setTimeout(() => {
+            eyeL.classList.remove('blink'); eyeR.classList.remove('blink');
+          }, 200);
+        }, 2000);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+[
+    { "command": "你覺得 NBA 的 goat 是誰？", "command_type": "聊天" },
+    { "command": "你覺得奶茶跟拿鐵哪個好喝？", "command_type": "聊天" },
+    { "command": "我今天心情不好不想上班", "command_type": "聊天" },
+    { "command": "幫我查行天宮附近的披薩店", "command_type": "查詢" },
+    { "command": "請問今天天氣如何？", "command_type": "查詢" },
+    { "command": "今天有什麼重大新聞？", "command_type": "查詢" },
+    { "command": "幫我去樓下拿包裹", "command_type": "行動" },
+    { "command": "幫我去茶水間泡杯咖啡給顧問", "command_type": "行動" },
+    { "command": "幫我送請購單給工讀生", "command_type": "行動" }
+  ]
+  
