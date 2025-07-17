@@ -50,6 +50,75 @@
 
 ---
 
+## 🚀 安裝和設置
+
+### 前提條件
+- Node.js 14+ 和npm
+- Python 3.8+
+- AWS帳戶與相關服務訪問權限
+
+### 後端設置
+```bash
+# 克隆儲存庫
+git clone https://github.com/yourusername/ch-voice-assistant.git
+cd ch-voice-assistant
+
+# 設置Python虛擬環境
+python -m venv venv
+source venv/bin/activate  # Windows使用: venv\Scripts\activate
+
+# 安裝後端依賴
+cd backend
+pip install -r requirements.txt
+
+# 配置AWS憑證
+# 在backend/config/.env中添加:
+# AWS_ACCESS_KEY_ID=your_access_key
+# AWS_SECRET_ACCESS_KEY=your_secret_key
+# AWS_REGION=your_region
+# SAGEMAKER_ENDPOINT_NAME=your_endpoint_name
+```
+
+### 前端設置
+```bash
+# 安裝前端依賴
+cd ../frontend
+npm install
+
+# 啟動開發服務器
+npm run dev
+```
+
+### 啟動應用
+```bash
+# 啟動後端服務 (在backend目錄)
+python app.py
+
+# 在瀏覽器訪問
+# http://localhost:5173 (或Vite顯示的端口)
+```
+
+## 📊 使用方法
+
+1. 打開應用後，點擊螢幕以啟用麥克風
+2. 說"你好"來喚醒語音助手
+3. 當系統顯示"我在聽"時，說出您的問題或命令
+4. 系統會通過文字和語音回應您的請求
+5. 說"再見"結束當前對話，返回待機模式
+
+### 語音控制命令
+- "停" - 停止當前語音播放
+- "慢一點" - 降低語音播放速度
+- "快一點" - 提高語音播放速度
+- "恢復正常" - 重置為默認語音速度
+
+## 💡 開發者筆記
+
+- 前端使用MediaRecorder API錄製音頻，發送到後端進行處理
+- 後端使用AWS Whisper模型進行語音識別，精確度高於Web Speech API
+- 命令分類使用AWS Bedrock代理實現，基於參考示例進行分類
+- 後端使用多執行緒處理音頻和命令，避免阻塞主線程
+
 ## 🧪 系統流程簡圖
 
 1. 🟢 **喚醒階段**：監聽「你好」 → 進入指令接收
