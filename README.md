@@ -9,7 +9,6 @@
 
 本專案為一款基於 AWS 雲端語音服務的中文語音助手，具備熱詞喚醒、語音辨識、智能命令分類與語音回覆等功能，致力於打造自然流暢的語音交互體驗。
 
-👉 原始碼連結：[Edward43w/CH_hackthon](https://github.com/Edward43w/CH_hackthon)
 
 ---
 
