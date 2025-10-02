@@ -35,13 +35,13 @@
 
 ## 🛠️ 技術架構
 
-### 前端（由我負責）：
+### 前端：
 - React + Vite 開發框架
 - Web Audio API（錄音）
 - SpeechSynthesis API（語音播放）
 - Axios（與 Flask 後端通信）
 
-### 後端（團隊其他成員）：
+### 後端：
 - Flask Web Server
 - AWS Whisper（語音轉文字）
 - AWS Polly（文字轉語音）
@@ -140,3 +140,4 @@ python app.py
 
 本專案採用 MIT License  
 © 2025 中文語音助手開發團隊
+
